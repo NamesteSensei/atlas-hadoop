@@ -1,0 +1,33 @@
+cat > .gitignore << 'EOF'
+# Hadoop
+hadoop/
+usr/
+local/
+
+# Data files
+*.tar.gz
+*.csv
+*.txt
+
+# SSH keys
+.ssh/
+id_rsa*
+authorized_keys
+*.pub
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# VSCode / IDE
+.vscode/
+.idea/
+EOF
