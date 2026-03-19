@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
 import sys
 
-current_company = None
-current_total = 0
+top = []
 
 for line in sys.stdin:
     line = line.strip()
 
     try:
-        _, value = line.split("\t")
+        id, value = line.split("\t")
         company, salary = value.split(",")
+        salary = float(salary)
 
-        salary = int(salary)
+        top.append((salary, id, company))
 
-        if current_company == company:
-            current_total += salary
-        else:
-            if current_company:
-                print(f"{current_company}\t{current_total}")
-
-            current_company = company
-            current_total = salary
+        # keep only top 10
+        top = sorted(top, reverse=True)[:10]
 
     except:
         continue
 
-# print last company
-if current_company:
-    print(f"{current_company}\t{current_total}")
+# final output
+print("id\tSalary\tcompany")
+for salary, id, company in top:
+    print(f"{id}\t{salary}\t{company}")
