@@ -1,62 +1,121 @@
-# Hadoop Project - Atlas School
+Hadoop Project
 
-##  Description
-This project demonstrates the setup and usage of Hadoop (HDFS) using Ubuntu and WSL.  
-We configured a single-node Hadoop cluster and performed basic HDFS operations.
 
----
+📌 Overview
 
-## ⚙️ Setup
+This project demonstrates the setup and usage of Apache Hadoop (HDFS + MapReduce) using Bash and Python. It covers file management, automation, and distributed data processing.
 
-- Ubuntu (WSL)
-- Hadoop 3.3.2
-- Java 11
-- SSH configured
+⚙️ Technologies Used
 
----
+Apache Hadoop 3.3.2
 
-## Project Structure
+Ubuntu (WSL)
 
----
+Java 11
 
-##  Tasks
+Bash
 
-### 0. HDFS with Bash
+Python 3
 
-Script: `createdirectories.sh`
+Snakebite (HDFS Python client)
 
-Creates directories in HDFS:
-- `/holbies`
-- `/holbies/input`
+🗂️ Project Structure
+atlas-hadoop/
+├── README.md
+├── createdirectories.sh
+├── lao.txt
+├── salaries.csv
+├── hadoop_project/
+│   ├── mapper.py
+│   ├── reducer.py
+│   ├── lao.sh
+│   ├── text.sh
+│   ├── 4-createdir.py
+│   ├── 5-deletedir.py
+│   ├── 6-download.py
+🚀 HDFS (Bash)
 
----
-
-## Commands Used
-
-```bash
-start-dfs.sh
+📁 Create directories
 hdfs dfs -mkdir -p /holbies/input
-hdfs dfs -ls -R /
 
-Data Processing
+📤 Upload file
+hdfs dfs -put lao.txt /holbies/input/
 
-Uploaded text file (lao.txt)
+📄 Read file
+hdfs dfs -cat /holbies/input/lao.txt
 
-Uploaded CSV file (salaries.csv)
+🐍 HDFS (Python - Snakebite)
+Create directories
+def createdir(l):
+    # creates directories in HDFS
+Delete directories
+def deletedir(l):
+    # deletes directories in HDFS
+Download files
+def download(l):
+    # downloads from HDFS to /tmp
 
-Performed basic analysis:
+🔁 MapReduce (Local)
+Mapper
 
-hdfs dfs -cat /holbies/input/lao.txt | wc -l
-hdfs dfs -cat /holbies/input/lao.txt | tr
+Transforms CSV into key-value pairs:
 
-Key Concepts
+id    company,salary
+Reducer
 
-HDFS file system
+Processes mapper output to:
 
-Hadoop cluster setup
+Aggregate data OR
 
-SSH configuration
+Extract top 10 salaries
 
-Data ingestion
+Run locally:
+cat salaries.csv | ./mapper.py | sort -k2,2 | ./reducer.py
+🌐 MapReduce (Hadoop Streaming)
 
-Basic MapReduce logic (word count)
+1. Upload data to HDFS
+hdfs dfs -mkdir -p /holbies/input
+hdfs dfs -put -f salaries.csv /holbies/input/
+2. Run job
+hadoop jar $HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming*.jar \
+-input /holbies/input/salaries.csv \
+-output /holbies/output \
+-mapper "python3 mapper.py" \
+-reducer "python3 reducer.py" \
+-file mapper.py \
+-file reducer.py
+3. View output
+hdfs dfs -cat /holbies/output/part-00000
+
+📊 Final Output Example
+id      Salary      company
+11      450000.0    Salesforce
+4       372000.0    Apple
+3       310000.0    Amazon
+...
+
+🧠 Key Concepts
+
+HDFS: Distributed file system for storing large data
+
+Mapper: Transforms raw data into key-value pairs
+
+Reducer: Aggregates and processes grouped data
+
+Streaming: Run MapReduce jobs using scripts (Python)
+
+🎯 Conclusion
+
+This project demonstrates how to:
+
+Set up and run Hadoop locally
+
+Manage files in HDFS
+
+Automate tasks with Bash and Python
+
+Process data using MapReduce
+
+👤 Author
+
+Christopher
